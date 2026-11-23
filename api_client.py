@@ -61,6 +61,7 @@ def search_team(name):
 
 @st.cache_data(ttl=21600, show_spinner=False)
 @st.cache_data(ttl=21600, show_spinner=False)
+@st.cache_data(ttl=21600, show_spinner=False)
 def recent_fixtures(team_id, count=10):
     today = date.today()
     start = today - timedelta(days=180)
@@ -69,13 +70,12 @@ def recent_fixtures(team_id, count=10):
         "fixtures",
         {
             "team": team_id,
+            "season": today.year,
             "from": start.isoformat(),
             "to": today.isoformat(),
             "timezone": "Europe/Istanbul"
         }
     )
-
-
 def team_rates(fixtures, team_id, venue):
     games = []
 
