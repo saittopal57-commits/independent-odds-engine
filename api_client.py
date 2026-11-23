@@ -105,14 +105,21 @@ def team_rates(fixtures, team_id, venue):
             continue
 
         if venue == "all" or venue == side:
-            games.append((float(scored), float(conceded)))
+            games.append((
+                fixture["date"],
+                float(scored),
+                float(conceded)
+            ))
+
+    games.sort(key=lambda x: x[0], reverse=True)
+    games = games[:10]
 
     if not games:
-        raise ValueError("Gol istatistiği için yeterli maç bulunamadı.")
+        raise ValueError("Son 180 günde uygun tamamlanmış maç bulunamadı.")
 
     return {
-        "scored": sum(x[0] for x in games) / len(games),
-        "conceded": sum(x[1] for x in games) / len(games),
+        "scored": sum(x[1] for x in games) / len(games),
+        "conceded": sum(x[2] for x in games) / len(games),
         "count": len(games)
     }
 
