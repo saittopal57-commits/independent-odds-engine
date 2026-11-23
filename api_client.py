@@ -33,7 +33,11 @@ def api_get(endpoint, params):
 
 @st.cache_data(ttl=21600, show_spinner=False)
 def search_team(name):
-    results = api_get("teams", {"search": name})
+    clean_name = "".join(
+        c for c in unicodedata.normalize("NFKD", name)
+        if c.isalnum() or c.isspace()
+    )
+    results = api_get("teams", {"search": clean_name.strip()})
 
     if not results:
         raise ValueError(f"Takım bulunamadı: {name}")
