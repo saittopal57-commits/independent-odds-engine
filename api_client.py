@@ -60,10 +60,19 @@ def search_team(name):
 
 
 @st.cache_data(ttl=21600, show_spinner=False)
+@st.cache_data(ttl=21600, show_spinner=False)
 def recent_fixtures(team_id, count=10):
+    today = date.today()
+    start = today - timedelta(days=180)
+
     return api_get(
         "fixtures",
-        {"team": team_id, "last": count}
+        {
+            "team": team_id,
+            "from": start.isoformat(),
+            "to": today.isoformat(),
+            "timezone": "Europe/Istanbul"
+        }
     )
 
 
